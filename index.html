@@ -18,22 +18,35 @@
       --accent:#d91e18; --accent-2:#f6c11b;
       --text:#20140f; --muted:#6c5646; --rule:#ead7bb;
       --radius:18px; --measure:68ch;
+      --shadow: 0 8px 24px rgba(23,32,51,.06);
+      --shadow-strong: 0 16px 48px rgba(23,32,51,.12);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0; color:var(--text); line-height:1.68; overflow-x:hidden;
       font-family:"Be Vietnam Pro", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:linear-gradient(180deg, rgba(246,193,27,.08), transparent 120px), var(--bg);
+      background:
+        radial-gradient(1000px 160px at 10% -40%, rgba(246,193,27,.10), transparent 60%),
+        radial-gradient(900px 140px at 110% -30%, rgba(217,30,24,.08), transparent 60%),
+        linear-gradient(180deg, rgba(246,193,27,.08), transparent 140px),
+        var(--bg);
     }
-    a{color:var(--accent); text-decoration:none}
+    a{color:var(--accent); text-decoration:none; position:relative}
     a:hover{text-decoration:underline}
     .container{width:min(1140px, 92%); margin:auto}
+
+    /* Progress bar */
     #progress{position:fixed; top:0; left:0; right:0; height:6px;
       background:linear-gradient(90deg, var(--accent), var(--accent-2));
       transform:scaleX(0); transform-origin:0 50%; z-index:9999; box-shadow:0 2px 10px rgba(0,0,0,.08)}
+
+    /* Topbar + animated underline links */
     .topbar{position:sticky; top:0; z-index:10000; backdrop-filter:saturate(1.2) blur(8px);
-      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.86)); border-bottom:1px solid var(--rule)}
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.86));
+      border-bottom:1px solid var(--rule);
+      animation:slideDown .5s ease both}
+    @keyframes slideDown{from{transform:translateY(-16px); opacity:0} to{transform:none; opacity:1}}
     .topbar .wrap{
       display:flex; align-items:center; gap:12px;
       width:min(1140px,92%); margin:auto; height:60px;
@@ -41,11 +54,21 @@
     .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px; white-space:nowrap; flex:0 0 auto;}
     .brand .dot{width:14px;height:14px;border-radius:50%; background:linear-gradient(45deg, var(--accent), var(--accent-2)); box-shadow:0 0 0 4px rgba(246,193,27,.15); animation:floatY 4s ease-in-out infinite}
     .brand-title{font-size:14.5px}
+
     .nav{ display:flex; gap:8px 14px; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; white-space:nowrap; flex:1 1 auto; justify-content:flex-end; min-width:0;}
     .nav::-webkit-scrollbar{display:none}
-    .nav a{padding:8px 10px; border-radius:12px; color:#5a4638; font-weight:600; transition:transform .15s ease, background .2s ease}
-    .nav a.active{background:linear-gradient(90deg, rgba(217,30,24,.1), rgba(246,193,27,.12)); color:#2d1d16; box-shadow:inset 0 0 0 1px rgba(217,30,24,.2)}
+    .nav a{
+      padding:8px 10px; border-radius:12px; color:#5a4638; font-weight:600;
+      transition:transform .15s ease, background .2s ease, color .2s ease}
+    .nav a::after{
+      content:""; position:absolute; left:10px; right:10px; bottom:2px; height:2px;
+      background:linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform:scaleX(0); transform-origin:0 50%; transition:transform .25s ease}
     .nav a:hover{background:rgba(246,193,27,.14); transform:translateY(-2px)}
+    .nav a:hover::after{transform:scaleX(1)}
+    .nav a.active{background:linear-gradient(90deg, rgba(217,30,24,.1), rgba(246,193,27,.12)); color:#2d1d16; box-shadow:inset 0 0 0 1px rgba(217,30,24,.2)}
+    .nav a.active::after{transform:scaleX(1)}
+
     header.hero{position:relative; padding:86px 0 56px; overflow:hidden; isolation:isolate}
     header.hero::after{
       content:""; position:absolute; inset:-10% -20% auto -20%; height:220px;
@@ -53,35 +76,61 @@
                  radial-gradient(500px 140px at 90% 10%, rgba(217,30,24,.12), transparent 60%);
       transform:translateY(var(--heroParallax,0px)); transition:transform .2s ease; pointer-events:none; z-index:-1;
     }
-    .hero h1{font-family:"Playfair Display", serif; font-size:clamp(30px, 4.2vw + 12px, 64px); line-height:1.08; margin:0 0 14px}
-    .dek{max-width:var(--measure); color:var(--muted)}
-    .ruler{height:1px; background:linear-gradient(90deg, var(--accent), var(--accent-2)); margin:18px 0}
+    .hero h1{font-family:"Playfair Display", serif; font-size:clamp(30px, 4.2vw + 12px, 64px); line-height:1.08; margin:0 0 14px; animation:fadeUp .6s ease both}
+    .dek{max-width:var(--measure); color:var(--muted); animation:fadeUp .6s ease .08s both}
+    .ruler{height:1px; background:linear-gradient(90deg, var(--accent), var(--accent-2)); margin:18px 0; animation:grow 1.2s ease .2s forwards; transform-origin:0 50%; transform:scaleX(0)}
+
     section{padding:56px 0}
     h2.kicker{font-weight:800; color:#5f3a2d; letter-spacing:.12em; text-transform:uppercase; font-size:12px; margin:0 0 8px}
-    h2.title{font-family:"Playfair Display", serif; font-size:34px; margin:0 0 12px}
+    h2.title{font-family:"Playfair Display", serif; font-size:34px; margin:0 0 12px; position:relative}
+    h2.title::after{content:""; position:absolute; left:0; bottom:-6px; width:64px; height:4px;
+      background:linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius:999px; animation:grow .7s ease both}
+
     p.lead{max-width:var(--measure); font-size:18px; color:#6c5646}
+
     .cols{display:grid; grid-template-columns:2fr 1fr; gap:24px}
     .cols .copy{max-width:var(--measure)}
-    .dropcap:first-letter{float:left; font-family:"Playfair Display", serif; font-size:3.2em; line-height:.8; padding:.06em .18em 0 0; color:#d91e18}
+    .dropcap:first-letter{float:left; font-family:"Playfair Display", serif; font-size:3.2em; line-height:.8; padding:.06em .18em 0 0; color:#d91e18; animation:pop .5s ease both}
+
     .grid{display:grid; gap:22px}
     .grid-2{grid-template-columns:repeat(2, 1fr)}
     .grid-3{grid-template-columns:repeat(auto-fit, minmax(260px, 1fr))}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.97), rgba(255,255,255,.94)); border:1px solid var(--rule); border-radius:var(--radius); padding:20px; box-shadow:0 8px 24px rgba(23,32,51,.06); transition:transform .25s ease, box-shadow .25s ease}
-    .card:hover{transform:translateY(-4px); box-shadow:0 16px 48px rgba(23,32,51,.08)}
-    .chip{display:inline-block; font-size:12px; color:#7a3b36; border:1px solid rgba(217,30,24,.28); padding:4px 8px; border-radius:999px; background:rgba(255,235,210,.55); animation:fadeUp .5s ease both}
+
+    /* Cards + glow hover */
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.97), rgba(255,255,255,.94));
+      border:1px solid var(--rule); border-radius:var(--radius); padding:20px;
+      box-shadow:var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease, filter .25s ease}
+    .card:hover{transform:translateY(-4px); box-shadow:var(--shadow-strong)}
+    .glow-hover{position:relative}
+    .glow-hover::after{
+      content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; opacity:0;
+      background:conic-gradient(from 180deg at 50% 50%, rgba(217,30,24,.4), rgba(246,193,27,.4), rgba(217,30,24,.4));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude; transition:opacity .3s ease}
+    .glow-hover:hover::after{opacity:.55}
+
+    .chip{display:inline-block; font-size:12px; color:#7a3b36; border:1px solid rgba(217,30,24,.28); padding:4px 8px; border-radius:999px; background:rgba(255,235,210,.55); animation:floatY 4s ease-in-out infinite}
     .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; background:#fff; border:1px solid var(--rule); border-radius:16px; padding:14px; box-shadow:0 8px 24px rgba(0,0,0,.04)}
     .stat{display:grid; gap:6px; align-content:start}
-    .stat .num{font-weight:800; font-size:28px; color:#3b2b21}
+    .stat .num{font-weight:800; font-size:28px; color:#3b2b21; transition:transform .2s ease}
+    .stat:hover .num{transform:scale(1.04)}
     .stat .desc{color:#6a5647; font-size:14px}
+
     .frame{position:relative; aspect-ratio:16/10; border-radius:16px; overflow:hidden; background:#fffefb; border:1px solid var(--rule); display:flex; align-items:center; justify-content:center; transition:transform .25s ease, box-shadow .25s ease}
     .frame::before{content:""; position:absolute; inset:0; padding:1px; border-radius:16px; background:conic-gradient(from 180deg at 50% 50%, rgba(217,30,24,.6), rgba(246,193,27,.6), rgba(217,30,24,.6)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; opacity:.25; pointer-events:none}
     .frame .title{position:absolute; top:10px; left:10px; background:linear-gradient(90deg, var(--accent), var(--accent-2)); color:#fff; font-weight:700; padding:6px 10px; border-radius:999px; font-size:12px; box-shadow:0 4px 10px rgba(217,30,24,.15); overflow:hidden}
     .frame .title::after{content:""; position:absolute; top:0; left:-40%; width:40%; height:100%; background:linear-gradient(90deg, rgba(255,255,255,.0), rgba(255,255,255,.5), rgba(255,255,255,0)); transform:skewX(-20deg); animation:shimmer 3s linear infinite}
+
+    /* Vertical process timeline */
     .vprocess{position:relative; display:grid; gap:16px; padding:20px 0}
     .vprocess::before{content:""; position:absolute; left:24px; top:0; bottom:0; width:3px; background:linear-gradient(180deg, rgba(217,30,24,.25), rgba(246,193,27,.25)); border-radius:2px; animation:strokeGrow 1.2s ease .2s both}
     .vline{position:absolute; left:24px; top:0; bottom:0; width:3px; pointer-events:none}
     .vbar{position:absolute; left:0; top:0; width:100%; height:0%; background:linear-gradient(180deg, var(--accent), var(--accent-2)); box-shadow:0 6px 14px rgba(217,30,24,.28); border-radius:3px; transition:height .25s ease}
-    .vstep{position:relative; display:grid; grid-template-columns:120px 1fr; gap:14px; background:#fff; border:1px solid var(--rule); border-radius:16px; padding:16px 18px; overflow:hidden}
+    .vstep{position:relative; display:grid; grid-template-columns:120px 1fr; gap:14px; background:#fff; border:1px solid var(--rule); border-radius:16px; padding:16px 18px; overflow:hidden; transition:transform .25s ease}
+    .vstep:hover{transform:translateY(-3px)}
     .vstep::after{content:""; position:absolute; inset:0; background:radial-gradient(600px 80px at -10% -10%, rgba(246,193,27,.08), transparent 60%); opacity:0; transition:opacity .4s ease}
     .vstep.visible::after{opacity:1}
     .vstep .time{position:relative; font-weight:800; color:#3b2b21; display:flex; align-items:center; justify-content:center; font-size:18px; background:#fffdf6; border:1px solid var(--rule); border-radius:12px; padding:10px 8px; transform:translateZ(0)}
@@ -89,42 +138,67 @@
     .vstep .time::before{content:""; position:absolute; left:-43px; width:14px; height:14px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 8px 16px rgba(217,30,24,.25); animation:pulse 2.2s ease-in-out infinite}
     .vstep .content h3{margin:0 0 6px; font-size:18px}
     .vstep .content p{margin:0}
-    .feature{position:relative; border:1px solid var(--rule); border-radius:18px; background:#fff; padding:22px; display:grid; grid-template-columns:1.2fr .8fr; gap:18px; box-shadow:0 10px 30px rgba(0,0,0,.05)}
+
+    /* Feature slider */
+    .feature{position:relative; border:1px solid var(--rule); border-radius:18px; background:#fff; padding:22px; display:grid; grid-template-columns:1.2fr .8fr; gap:18px; box-shadow:0 10px 30px rgba(0,0,0,.05); overflow:hidden}
     .feature .info h3{margin:0 0 8px}
     .feature .meta{color:#6a5647}
-    .feature .ph{border:2px dashed var(--rule); border-radius:12px; min-height:260px; background:repeating-linear-gradient(45deg,#fffdf7,#fffdf7 12px,#fff8e6 12px,#fff8e6 24px); display:grid; place-items:center}
+    .feature .ph{border:2px dashed var(--rule); border-radius:12px; min-height:260px; background:repeating-linear-gradient(45deg,#fffdf7,#fffdf7 12px,#fff8e6 12px,#fff8e6 24px); display:grid; place-items:center; animation:kenburns 12s ease-in-out infinite}
+    @keyframes kenburns{0%{transform:scale(1) translate(0,0)} 50%{transform:scale(1.03) translate(1%, -1%)} 100%{transform:scale(1) translate(0,0)}}
     .feature .ctrl{position:absolute; inset:auto 14px 14px auto; display:flex; gap:8px; z-index:5}
     .feature .btn{border:none; padding:10px 14px; border-radius:999px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.14); transform:translateZ(0); transition:transform .15s ease, filter .2s ease}
     .feature .btn:hover{filter:saturate(1.08)} .feature .btn:active{transform:scale(.98)}
     .feature .pager{position:absolute; right:18px; top:14px; font-weight:800; color:#6a5647; background:#fff; border:1px solid var(--rule); border-radius:999px; padding:6px 10px; box-shadow:0 6px 14px rgba(0,0,0,.06)}
     .feature .dots{position:absolute; left:18px; bottom:14px; display:flex; gap:8px}
-    .feature .dot{width:8px;height:8px;border-radius:50%; background:#ead7bb; border:0; transition:transform .15s ease}
+    .feature .dot{width:8px;height:8px;border-radius:50%; background:#ead7bb; border:0; transition:transform .15s ease, background .2s ease}
     .feature .dot.active{background:linear-gradient(135deg,var(--accent),var(--accent-2)); transform:scale(1.3)}
     .feature.fade{animation:fade .35s ease}
+
+    /* Glossary tooltip */
     .g{position:relative; border-bottom:1px dashed #b08a55; cursor:help}
     .pop{position:absolute; left:0; top:110%; width:min(420px, 88vw); background:#fff; border:1px solid var(--rule); border-radius:12px; padding:10px 12px; box-shadow:0 10px 30px rgba(0,0,0,.08); display:none}
-    .g.open .pop{display:block; animation:fadeUp .25s ease both}
-    .quiz{position:relative; z-index:1; border:1px solid var(--rule); border-radius:18px; padding:22px; background:linear-gradient(180deg,#fff, #fffdf6); box-shadow:0 10px 30px rgba(0,0,0,.06)}
+
+    /* Quiz */
+    .quiz{position:relative; z-index:1; border:1px solid var(--rule); border-radius:18px; padding:22px; background:linear-gradient(180deg,#fff, #fffdf6); box-shadow:0 10px 30px rgba(0,0,0,.06); overflow:hidden}
+    .quiz::after{content:""; position:absolute; inset:auto -30% -40% -30%; height:120px; background:radial-gradient(600px 100px at 50% 100%, rgba(246,193,27,.12), transparent 60%)}
     .quiz h3{margin:0 0 10px}
     .quiz-intro{position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid var(--rule); border-radius:14px; background:#fff; padding:14px}
     .quiz-meta{color:#6b584a}
     .quiz-progress{height:6px; background:#f3e7d2; border-radius:999px; overflow:hidden; margin-top:8px}
     .quiz-progress > div{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .3s ease}
-    .btn, .check{pointer-events:auto; position:relative; z-index:3; border:none; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; border-radius:999px; padding:10px 16px; cursor:pointer; box-shadow:0 8px 18px rgba(217,30,24,.18); transform:translateZ(0); transition:filter .2s ease, transform .15s ease; overflow:hidden}
-    .btn:hover, .check:hover{filter:saturate(1.1)} .btn:active, .check:active{transform:scale(.98)}
+
+    /* Buttons + ripple + magnetic */
+    .btn, .check{
+      pointer-events:auto; position:relative; z-index:3; border:none;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#fff; border-radius:999px; padding:10px 16px; cursor:pointer;
+      box-shadow:0 8px 18px rgba(217,30,24,.18);
+      transform:translateZ(0);
+      transition:filter .2s ease, transform .15s ease, box-shadow .25s ease;
+      overflow:hidden}
+    .btn:hover, .check:hover{filter:saturate(1.1)}
+    .btn:active, .check:active{transform:scale(.98)}
     .btn .ripple, .check .ripple{position:absolute; border-radius:50%; transform:scale(0); background:rgba(255,255,255,.45); animation:rip 600ms ease; pointer-events:none}
+
     .quiz-questions{display:none; animation:reveal .4s ease}
     .quiz-questions.show{display:block}
     @keyframes reveal{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
-    .q{margin:16px 0; padding:14px; border:1px dashed var(--rule); border-radius:12px; background:#fff}
+
+    .q{margin:16px 0; padding:14px; border:1px dashed var(--rule); border-radius:12px; background:#fff; transition:box-shadow .25s ease}
+    .q:hover{box-shadow:0 6px 18px rgba(0,0,0,.06)}
     .q.correct{animation:blinkGreen .7s ease}
     .q.wrong{animation:blinkRed .7s ease}
     .q .res{font-weight:700; margin-left:8px}
+
+    /* Reveal on scroll */
     .reveal{opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease}
     .reveal.visible{opacity:1; transform:none}
+
+    /* Tilt depth */
     .tilt{transform-style:preserve-3d}
     .tilt *{transform:translateZ(0.01px)}
-    .anim-line{transform-origin:0 50%; transform:scaleX(0); animation:grow 1.2s ease .2s forwards}
+
+    /* Keyframes */
     @keyframes grow{to{transform:scaleX(1)}}
     @keyframes fadeUp{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
     @keyframes fade{from{opacity:.6; transform:translateY(6px)} to{opacity:1; transform:none}}
@@ -136,23 +210,24 @@
     @keyframes rip{to{transform:scale(4); opacity:0}}
     @keyframes blinkGreen{0%,100%{box-shadow:0 0 0 0 rgba(31,122,63,.0)} 50%{box-shadow:0 0 0 6px rgba(31,122,63,.18)}}
     @keyframes blinkRed{0%,100%{box-shadow:0 0 0 0 rgba(184,28,21,.0)} 50%{box-shadow:0 0 0 6px rgba(184,28,21,.18)}}
-    @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} }
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none !important; transition:none !important}
+    }
+
+    /* Back to top */
     #totop{position:fixed; right:18px; bottom:18px; width:42px; height:42px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; border:none; cursor:pointer; box-shadow:0 10px 24px rgba(0,0,0,.15); opacity:0; pointer-events:none; transition:.25s}
     #totop.show{opacity:1; pointer-events:auto}
+
     .select-tip{color:var(--muted); margin:10px 0 0}
-  
-    /* Chatbot button */
-    #tochat{position:fixed; right:18px; bottom:72px; width:48px; height:48px; border-radius:50%;
-      display:grid; place-items:center; background:linear-gradient(135deg, var(--accent), var(--accent-2));
-      color:#fff; border:none; cursor:pointer; box-shadow:0 10px 24px rgba(0,0,0,.15);
-      opacity:.95; transition:transform .2s ease, filter .2s ease}
-    #tochat:hover{transform:translateY(-2px); filter:saturate(1.08)}
-    #tochat span{font-size:20px; font-weight:800}
-    
-</style>
+
+    /* Focus visibility for accessibility */
+    :focus-visible{outline:3px solid rgba(246,193,27,.6); outline-offset:2px; border-radius:10px}
+  </style>
 </head>
 <body>
   <div id="progress"></div>
+
   <nav id="topbar" class="topbar">
     <div class="wrap">
       <div class="brand">
@@ -170,10 +245,12 @@
       </div>
     </div>
   </nav>
+
   <header class="hero container">
     <h1>Đảng lãnh đạo hai cuộc kháng chiến<br/><span style="color:var(--accent)">Hoàn thành giải phóng dân tộc, thống nhất đất nước</span> (1945–1975)</h1>
-    <div class="ruler anim-line"></div>
+    <div class="ruler"></div>
   </header>
+
   <main>
     <section id="boicanh" class="container">
       <h2 class="kicker">Mở đầu</h2>
@@ -183,7 +260,7 @@
           <p class="dropcap">Sau Cách mạng Tháng Tám, nước Việt Nam Dân chủ Cộng hòa đứng trước thử thách sinh tử: nạn đói, mù chữ, thù trong giặc ngoài; phải vừa xây dựng chính quyền, vừa ngăn ngừa chiến tranh tái diễn.</p>
           <p>Chính phủ tổ chức tổng tuyển cử (6/1/1946), lập Quốc hội, thông qua Hiến pháp 1946; triển khai Bình dân học vụ, tăng gia sản xuất; đồng thời ngoại giao mềm dẻo để kéo dài hòa hoãn.
             Thuật ngữ <span class="g">“dĩ bất biến, ứng vạn biến”<span class="pop">Giữ vững mục tiêu chiến lược nhưng linh hoạt sách lược theo từng thời điểm.</span></span>.</p>
-          <div class="stats card reveal">
+          <div class="stats card glow-hover reveal">
             <div class="stat"><div class="num" data-count="89" data-suffix="%">0</div><div class="desc">Tỉ lệ cử tri đi bầu (6/1/1946)</div></div>
             <div class="stat"><div class="num" data-count="2500000">0</div><div class="desc">Người thoát mù chữ (cuối 1946)</div></div>
             <div class="stat"><div class="num" data-count="60" data-suffix=" ngày">0</div><div class="desc">Hà Nội “giam chân” địch</div></div>
@@ -199,42 +276,51 @@
         </aside>
       </div>
     </section>
+
     <section id="dienbien" class="container">
       <h2 class="kicker">Diễn biến</h2>
       <h2 class="title">1946 — 1947</h2>
       <div class="vprocess">
         <div class="vline"><span id="vbar" class="vbar"></span></div>
+
         <div class="vstep reveal">
           <div class="time">06/03/1946</div>
           <div class="content"><h3>Hiệp định Sơ bộ Việt–Pháp</h3><p>Pháp công nhận Việt Nam là quốc gia tự do trong Liên hiệp Pháp; ta cho quân Pháp ra Bắc thay quân Tưởng.</p></div>
         </div>
+
         <div class="vstep reveal">
           <div class="time">04–05/1946<br/>07–09/1946</div>
           <div class="content"><h3>Đà Lạt & Fontainebleau</h3><p>Đàm phán không đạt kết quả; ta tiếp tục hòa hoãn khi có thể và chuẩn bị kháng chiến.</p></div>
         </div>
+
         <div class="vstep reveal">
           <div class="time">14/09/1946</div>
           <div class="content"><h3>Tạm ước 14–9</h3><p>Nhân nhượng có nguyên tắc để kéo dài hòa hoãn, tranh thủ thời gian hoàn tất chuẩn bị.</p></div>
         </div>
+
         <div class="vstep reveal">
           <div class="time">19/12/1946</div>
           <div class="content"><h3>Lời kêu gọi Toàn quốc kháng chiến</h3><p>“Thà hy sinh tất cả, chứ nhất định không chịu mất nước…” — mở đầu 60 ngày đêm Hà Nội giam chân địch.</p></div>
         </div>
       </div>
+
       <div class="grid grid-2" style="margin-top:18px">
         <div class="card glow-hover reveal"><h3>Điểm nhấn đối ngoại</h3><p>Hiệp định Sơ bộ & Tạm ước 14–9 thể hiện nỗ lực tận dụng hòa bình để củng cố lực lượng.</p></div>
         <div class="card glow-hover reveal"><h3>Điểm nhấn đối nội</h3><p>Xây dựng chính quyền, bình dân học vụ, tăng gia sản xuất — tạo nền xã hội cho kháng chiến lâu dài.</p></div>
       </div>
     </section>
+
     <section id="trucot" class="container">
       <h2 class="kicker">Đường lối</h2>
       <h2 class="title">Bốn trụ cột của kháng chiến</h2>
+
       <div class="tabs" id="tabs">
         <button data-tab="td" class="btn" type="button">Toàn dân</button>
         <button data-tab="tt" class="btn" type="button">Toàn diện</button>
         <button data-tab="tk" class="btn" type="button">Trường kỳ</button>
         <button data-tab="tl" class="btn" type="button">Tự lực cánh sinh</button>
       </div>
+
       <style>.tabpanes > div{display:none} .tabpanes > div.show{display:block; animation:fadeUp .35s ease both}</style>
       <div class="tabpanes">
         <div id="td"><div class="grid grid-3">
@@ -242,16 +328,19 @@
           <article class="card tilt glow-hover reveal"><h3>Hậu phương – tiền tuyến</h3><p>Đẩy mạnh sản xuất, bảo đảm lương thực, chi viện mặt trận.</p></article>
           <article class="card tilt glow-hover reveal"><h3>Văn hóa – giáo dục</h3><p>Nâng dân trí, bồi dưỡng tinh thần yêu nước, đoàn kết.</p></article>
         </div></div>
+
         <div id="tt"><div class="grid grid-3">
           <article class="card tilt glow-hover reveal"><h3>Quân sự</h3><p>Du kích – vận động chiến – chính quy hóa dần.</p></article>
           <article class="card tilt glow-hover reveal"><h3>Chính trị</h3><p>Củng cố chính quyền, phát động quần chúng.</p></article>
           <article class="card tilt glow-hover reveal"><h3>Ngoại giao</h3><p>Tranh thủ quốc tế, cô lập đối phương.</p></article>
         </div></div>
+
         <div id="tk"><div class="grid grid-3">
           <article class="card tilt glow-hover reveal"><h3>Kế sách lâu dài</h3><p>Chuẩn bị, tiêu hao, phản công — từng bước giành chủ động.</p></article>
           <article class="card tilt glow-hover reveal"><h3>Thế – lực – thời</h3><p>Tạo thế có lợi, tích lũy lực, chớp thời cơ.</p></article>
           <article class="card tilt glow-hover reveal"><h3>Kiên định mục tiêu</h3><p>Độc lập, tự do là bất biến.</p></article>
         </div></div>
+
         <div id="tl"><div class="grid grid-3">
           <article class="card tilt glow-hover reveal"><h3>Tự cấp – tự túc</h3><p>Phát triển kinh tế kháng chiến; tiết kiệm, chống lãng phí.</p></article>
           <article class="card tilt glow-hover reveal"><h3>Khoa học – kỹ thuật</h3><p>Chế tạo vũ khí thô sơ lẫn nâng cấp dần.</p></article>
@@ -259,6 +348,7 @@
         </div></div>
       </div>
     </section>
+
     <section id="chiendich" class="container">
       <h2 class="kicker">Bước ngoặt</h2>
       <h2 class="title">Các mốc/chiến dịch tiêu biểu</h2>
@@ -268,6 +358,7 @@
         <article class="card tilt glow-hover reveal"><div class="chip">1950</div><h3>Biên giới</h3><p>Giải phóng biên giới Việt–Trung; mở đường viện trợ quốc tế; chuyển thế chủ động.</p></article>
       </div>
     </section>
+
     <section id="nhanvat" class="container">
       <h2 class="kicker">Trọng tâm</h2>
       <h2 class="title">Nhân vật & Văn kiện — Nổi bật</h2>
@@ -285,6 +376,7 @@
         <div class="dots" id="fv-dots"></div>
       </div>
     </section>
+
     <section id="ynghia" class="container">
       <h2 class="kicker">Kết tinh</h2>
       <h2 class="title">Ý nghĩa & Bài học kinh nghiệm</h2>
@@ -294,6 +386,7 @@
         <article class="card tilt glow-hover reveal"><h3>Mở rộng</h3><p>Vai trò của văn hóa – giáo dục trong kháng chiến kiến quốc; sức mạnh lòng dân.</p></article>
       </div>
     </section>
+
     <section id="quiz" class="container">
       <div class="quiz reveal">
         <div class="quiz-intro">
@@ -304,6 +397,7 @@
           </div>
           <button id="startQuiz" class="check" type="button">Bắt đầu</button>
         </div>
+
         <div class="quiz-questions" id="quizQs">
           <div class="q" data-ans="b">
             <div><strong>1)</strong> Tạm ước 14–9 (1946) nhằm mục tiêu chính nào?</div>
@@ -312,6 +406,7 @@
             <label><input type="radio" name="q1" value="c"> Ký kết liên minh quân sự</label><br/>
             <button class="check" type="button">Kiểm tra</button><span class="res"></span>
           </div>
+
           <div class="q" data-ans="c">
             <div><strong>2)</strong> Yếu tố giúp chuyển thế chủ động rõ nhất sau 1950?</div>
             <label><input type="radio" name="q2" value="a"> Tăng trưởng dân số</label><br/>
@@ -319,6 +414,7 @@
             <label><input type="radio" name="q2" value="c"> Chiến dịch Biên giới 1950</label><br/>
             <button class="check" type="button">Kiểm tra</button><span class="res"></span>
           </div>
+
           <div class="q" data-ans="a">
             <div><strong>3)</strong> “Tự lực cánh sinh” nhấn mạnh điều gì?</div>
             <label><input type="radio" name="q3" value="a"> Dựa vào sức mình là chính</label><br/>
@@ -326,6 +422,7 @@
             <label><input type="radio" name="q3" value="c"> Cắt giảm mọi giao thương</label><br/>
             <button class="check" type="button">Kiểm tra</button><span class="res"></span>
           </div>
+
           <div style="margin-top:10px">
             <button id="scoreQuiz" class="check" type="button">Chấm điểm</button>
             <span id="scoreOut" style="font-weight:700; margin-left:8px"></span>
@@ -334,51 +431,138 @@
       </div>
     </section>
   </main>
-  <footer class="container"><div style="height:1px;background:var(--rule);margin:12px 0 18px"></div><p style="color:#7a6a5e">Bố cục cân lề, thước đo chữ chuẩn tạp chí; tương tác & hiệu ứng mượt.</p></footer>
+
   <button id="totop" aria-label="Về đầu trang">↑</button>
+
   <script>
   const safe = (fn, label) => { try { fn(); } catch(e){ console.error('[InitError]', label, e); } };
+
   document.addEventListener('DOMContentLoaded', () => {
+
+    /* Progress bar + scroll spy + hero parallax */
     safe(() => {
       const prog = document.getElementById('progress');
       const links=[...document.querySelectorAll('#navLinks a')];
       const sections=links.map(a=>document.querySelector(a.getAttribute('href')));
-      function spy(){ const y=window.scrollY + 70; let cur=0; sections.forEach((sec,i)=>{ if(sec && sec.offsetTop<=y) cur=i; }); links.forEach((a,i)=>{ a.classList.toggle('active', i===cur); }); }
+
+      function spy(){
+        const y=window.scrollY + 70; let cur=0;
+        sections.forEach((sec,i)=>{ if(sec && sec.offsetTop<=y) cur=i; });
+        links.forEach((a,i)=>{ a.classList.toggle('active', i===cur); });
+      }
       function onScroll(){
         const h=document.documentElement; const sc=h.scrollTop; const max=h.scrollHeight-h.clientHeight;
         const p=max>0? sc/max: 0; if(prog){ prog.style.transform=`scaleX(${p})`; }
-        spy(); updateVBar?.(); const hero=document.querySelector('header.hero'); if(hero){ hero.style.setProperty('--heroParallax', `${-window.scrollY*0.06}px`); }
+        spy(); updateVBar?.();
+        const hero=document.querySelector('header.hero');
+        if(hero){ hero.style.setProperty('--heroParallax', `${-window.scrollY*0.06}px`); }
         document.getElementById('totop').classList.toggle('show', window.scrollY>240);
       }
-      links.forEach(a=>{ a.addEventListener('click',(e)=>{ e.preventDefault(); const el=document.querySelector(a.getAttribute('href')); if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); } }); });
+      links.forEach(a=>{
+        a.addEventListener('click',(e)=>{
+          e.preventDefault();
+          const el=document.querySelector(a.getAttribute('href'));
+          if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+        });
+      });
       document.addEventListener('scroll', onScroll, {passive:true}); onScroll();
     }, 'progress+spy');
+
+    /* Reveal on view with stagger */
     safe(() => {
       let idx=0;
       const io=('IntersectionObserver'in window)? new IntersectionObserver((ents)=>{
-        ents.forEach(e=>{ if(e.isIntersecting){ const delay=(idx++%8)*60; e.target.style.transitionDelay=delay+'ms'; e.target.classList.add('visible'); io.unobserve(e.target);} });
+        ents.forEach(e=>{
+          if(e.isIntersecting){
+            const delay=(idx++%8)*60;
+            e.target.style.transitionDelay=delay+'ms';
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
       },{threshold:.12}) : null;
-      document.querySelectorAll('.reveal, .card, .frame, .title, .kicker, .lead, .vstep, .feature').forEach(el=>{ if(io){ io.observe(el);} else { el.classList.add('visible'); } });
+
+      document.querySelectorAll('.reveal, .card, .frame, .title, .kicker, .lead, .vstep, .feature')
+        .forEach(el=>{ if(io){ io.observe(el);} else { el.classList.add('visible'); } });
     }, 'reveal-stagger');
+
+    /* Timeline progress bar */
     safe(() => {
       const vbar=document.getElementById('vbar'); const vproc=document.querySelector('#dienbien .vprocess');
-      window.updateVBar=function(){ if(!vbar||!vproc) return; const top=vproc.offsetTop-80; const bottom=top+vproc.offsetHeight; const y=window.scrollY+window.innerHeight*0.25; const pct=Math.min(1, Math.max(0,(y-top)/(bottom-top))); vbar.style.height=(pct*100)+'%'; }
+      window.updateVBar=function(){
+        if(!vbar||!vproc) return;
+        const top=vproc.offsetTop-80; const bottom=top+vproc.offsetHeight;
+        const y=window.scrollY+window.innerHeight*0.25;
+        const pct=Math.min(1, Math.max(0,(y-top)/(bottom-top)));
+        vbar.style.height=(pct*100)+'%';
+      }
       updateVBar();
     }, 'timeline');
+
+    /* Tilt depth */
     safe(() => {
-      function makeTilt(el){ el.classList.add('tilt'); el.addEventListener('mousemove',(e)=>{ const r=el.getBoundingClientRect(); const rx=((e.clientY-r.top)/r.height-.5)*-6; const ry=((e.clientX-r.left)/r.width-.5)*6; el.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`; }); el.addEventListener('mouseleave',()=>{ el.style.transform=''; });}
+      function makeTilt(el){
+        el.classList.add('tilt');
+        el.addEventListener('mousemove',(e)=>{
+          const r=el.getBoundingClientRect();
+          const rx=((e.clientY-r.top)/r.height-.5)*-6;
+          const ry=((e.clientX-r.left)/r.width-.5)*6;
+          el.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+        el.addEventListener('mouseleave',()=>{ el.style.transform=''; });
+      }
       document.querySelectorAll('.card, .frame').forEach(makeTilt);
     }, 'tilt');
+
+    /* Tabs: show on click only */
     safe(() => {
-      const tabBtns=[...document.querySelectorAll('#tabs button')]; const panes=[...document.querySelectorAll('.tabpanes > div')]; const tip=document.querySelector('.select-tip');
+      const tabBtns=[...document.querySelectorAll('#tabs button')];
+      const panes=[...document.querySelectorAll('.tabpanes > div')];
+      const tip=document.querySelector('.select-tip');
       panes.forEach(p=>p.classList.remove('show')); tabBtns.forEach(b=>b.classList.remove('active'));
-      tabBtns.forEach(b=>{ b.addEventListener('click', ()=>{ tabBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); panes.forEach(p=>p.classList.toggle('show', p.id===b.dataset.tab)); if(tip) tip.style.display='none'; }); });
+      tabBtns.forEach(b=>{
+        b.addEventListener('click', ()=>{
+          tabBtns.forEach(x=>x.classList.remove('active'));
+          b.classList.add('active');
+          panes.forEach(p=>p.classList.toggle('show', p.id===b.dataset.tab));
+          if(tip) tip.style.display='none';
+        });
+      });
     }, 'tabs');
-    safe(() => { document.querySelectorAll('.g').forEach(g=>{ g.addEventListener('mouseenter', ()=>g.classList.add('open')); g.addEventListener('mouseleave', ()=>g.classList.remove('open')); g.addEventListener('click', ()=>g.classList.toggle('open')); }); }, 'glossary');
+
+    /* Glossary tooltip open/close */
     safe(() => {
-      function countUp(el){ const raw=el.dataset.count||'0'; const target=parseInt(raw,10)||0; let cur=0; const dur=900; const t0=performance.now(); const suffix=el.dataset.suffix||''; function fmt(n){ return n.toLocaleString()+suffix;} function tick(t){ const p=Math.min(1,(t-t0)/dur); cur=Math.floor(target*p); el.textContent=fmt(cur); if(p<1) requestAnimationFrame(tick); else el.textContent=fmt(target);} requestAnimationFrame(tick); }
-      document.querySelectorAll('.num').forEach(countUp);
+      document.querySelectorAll('.g').forEach(g=>{
+        g.addEventListener('mouseenter', ()=>g.classList.add('open'));
+        g.addEventListener('mouseleave', ()=>g.classList.remove('open'));
+        g.addEventListener('click', ()=>g.classList.toggle('open'));
+      });
+    }, 'glossary');
+
+    /* Count-up numbers (trigger on appear) */
+    safe(() => {
+      function countUp(el){
+        const raw=el.dataset.count||'0'; const target=parseInt(raw,10)||0;
+        let cur=0; const dur=1000; const t0=performance.now();
+        const suffix=el.dataset.suffix||'';
+        const fmt=n=> n.toLocaleString()+suffix;
+        function tick(t){
+          const p=Math.min(1,(t-t0)/dur);
+          cur=Math.floor(target*(p*p)); // ease
+          el.textContent=fmt(cur);
+          if(p<1) requestAnimationFrame(tick); else el.textContent=fmt(target);
+        }
+        requestAnimationFrame(tick);
+      }
+      const io = ('IntersectionObserver'in window) ? new IntersectionObserver((ents)=>{
+        ents.forEach(e=>{
+          if(e.isIntersecting){ countUp(e.target); io.unobserve(e.target); }
+        });
+      },{threshold:.6}) : null;
+      document.querySelectorAll('.num').forEach(n=> io ? io.observe(n) : countUp(n));
     }, 'countup');
+
+    /* Feature slider */
     safe(() => {
       const fvData=[
         {title:'Hồ Chí Minh', meta:'Lãnh đạo tối cao; đường lối kháng chiến kiến quốc; tư tưởng độc lập – tự do – hạnh phúc.', img:''},
@@ -389,27 +573,117 @@
         {title:'Hiệp định Giơ-ne-vơ (1954)', meta:'Chấm dứt chiến tranh Đông Dương; miền Bắc được giải phóng.', img:''}
       ];
       let fvIndex=0;
-      const fvEl=document.getElementById('featureNv'); const fvTitle=document.getElementById('fv-title'); const fvMeta=document.getElementById('fv-meta'); const fvPh=document.getElementById('fv-ph'); const fvPrev=document.getElementById('fv-prev'); const fvNext=document.getElementById('fv-next'); const dotsWrap=document.getElementById('fv-dots');
-      const renderFV=()=>{ const d=fvData[fvIndex]; fvTitle.textContent=d.title; fvMeta.textContent=d.meta; fvPh.textContent='(Chỗ trống đặt ảnh)'; document.getElementById('fv-total').textContent=fvData.length; document.getElementById('fv-now').textContent=fvIndex+1; [...dotsWrap.querySelectorAll('.dot')].forEach((el,i)=>el.classList.toggle('active', i===fvIndex)); fvEl.classList.remove('fade'); void fvEl.offsetWidth; fvEl.classList.add('fade'); };
-      dotsWrap.innerHTML=''; fvData.forEach((_,i)=>{ const d=document.createElement('button'); d.className='dot'; d.type='button'; d.setAttribute('aria-label',`Tới mục ${i+1}`); d.addEventListener('click',()=>{ fvIndex=i; renderFV(); }); dotsWrap.appendChild(d); });
+      const fvEl=document.getElementById('featureNv');
+      const fvTitle=document.getElementById('fv-title');
+      const fvMeta=document.getElementById('fv-meta');
+      const fvPh=document.getElementById('fv-ph');
+      const fvPrev=document.getElementById('fv-prev');
+      const fvNext=document.getElementById('fv-next');
+      const dotsWrap=document.getElementById('fv-dots');
+
+      const renderFV=()=>{
+        const d=fvData[fvIndex];
+        fvTitle.textContent=d.title; fvMeta.textContent=d.meta; fvPh.textContent='(Chỗ trống đặt ảnh)';
+        document.getElementById('fv-total').textContent=fvData.length;
+        document.getElementById('fv-now').textContent=fvIndex+1;
+        [...dotsWrap.querySelectorAll('.dot')].forEach((el,i)=>el.classList.toggle('active', i===fvIndex));
+        fvEl.classList.remove('fade'); void fvEl.offsetWidth; fvEl.classList.add('fade');
+      };
+
+      dotsWrap.innerHTML='';
+      fvData.forEach((_,i)=>{
+        const d=document.createElement('button');
+        d.className='dot'; d.type='button'; d.setAttribute('aria-label',`Tới mục ${i+1}`);
+        d.addEventListener('click',()=>{ fvIndex=i; renderFV(); });
+        dotsWrap.appendChild(d);
+      });
+
       fvPrev.addEventListener('click', ()=>{ fvIndex=(fvIndex-1+fvData.length)%fvData.length; renderFV(); });
       fvNext.addEventListener('click', ()=>{ fvIndex=(fvIndex+1)%fvData.length; renderFV(); });
-      fvEl.tabIndex=0; fvEl.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ fvIndex=(fvIndex+1)%fvData.length; renderFV(); } else if(e.key==='ArrowLeft'){ fvIndex=(fvIndex-1+fvData.length)%fvData.length; renderFV(); } });
+      fvEl.tabIndex=0;
+      fvEl.addEventListener('keydown', (e)=>{
+        if(e.key==='ArrowRight'){ fvIndex=(fvIndex+1)%fvData.length; renderFV(); }
+        else if(e.key==='ArrowLeft'){ fvIndex=(fvIndex-1+fvData.length)%fvData.length; renderFV(); }
+      });
       renderFV();
     }, 'featured');
+
+    /* Quiz logic + ripple + progress */
     safe(() => {
-      const startBtn=document.getElementById('startQuiz'); const quizQs=document.getElementById('quizQs'); const qTotal=document.getElementById('q-total'); const qProgressbar=document.getElementById('q-progressbar');
-      startBtn.addEventListener('click',()=>{ quizQs.classList.add('show'); startBtn.disabled=true; startBtn.textContent='Đã bắt đầu'; qProgressbar.style.width='0%'; qProgressbar.style.transition='none'; requestAnimationFrame(()=>{ qProgressbar.style.transition='width .3s ease'; }); });
-      function updateProgress(){ const total=parseInt(qTotal.textContent,10)||3; const answered=[...quizQs.querySelectorAll('.q')].filter(q=>q.querySelector('input[type="radio"]:checked')).length; const pct=Math.round((answered/total)*100); qProgressbar.style.width=pct+'%'; }
-      document.querySelectorAll('.q').forEach(q=>{ const ans=q.dataset.ans; const btn=q.querySelector('.check'); const res=q.querySelector('.res'); q.addEventListener('change', updateProgress); btn.addEventListener('click',()=>{ const val=q.querySelector('input[type="radio"]:checked')?.value; if(!val){ res.textContent=' – chọn 1 đáp án'; res.style.color='#7a3b36'; q.classList.remove('correct','wrong'); return; } const ok=(val===ans); res.textContent=ok?' – đúng':' – chưa đúng'; res.style.color= ok? '#1f7a3f':'#b81c15'; q.classList.remove('correct','wrong'); q.classList.add(ok?'correct':'wrong'); updateProgress(); }); });
-      document.getElementById('scoreQuiz').addEventListener('click',()=>{ const qs=[...quizQs.querySelectorAll('.q')]; let score=0; qs.forEach(q=>{ const val=q.querySelector('input[type="radio"]:checked')?.value; if(val && val===q.dataset.ans) score++; }); document.getElementById('scoreOut').textContent=`Bạn đúng ${score}/${qs.length}`; });
+      const startBtn=document.getElementById('startQuiz');
+      const quizQs=document.getElementById('quizQs');
+      const qTotal=document.getElementById('q-total');
+      const qProgressbar=document.getElementById('q-progressbar');
+
+      startBtn.addEventListener('click',()=>{
+        quizQs.classList.add('show');
+        startBtn.disabled=true; startBtn.textContent='Đã bắt đầu';
+        qProgressbar.style.width='0%'; qProgressbar.style.transition='none';
+        requestAnimationFrame(()=>{ qProgressbar.style.transition='width .3s ease'; });
+      });
+
+      function updateProgress(){
+        const total=parseInt(qTotal.textContent,10)||3;
+        const answered=[...quizQs.querySelectorAll('.q')].filter(q=>q.querySelector('input[type="radio"]:checked')).length;
+        const pct=Math.round((answered/total)*100); qProgressbar.style.width=pct+'%';
+      }
+
+      document.querySelectorAll('.q').forEach(q=>{
+        const ans=q.dataset.ans; const btn=q.querySelector('.check'); const res=q.querySelector('.res');
+        q.addEventListener('change', updateProgress);
+        btn.addEventListener('click',()=>{
+          const val=q.querySelector('input[type="radio"]:checked')?.value;
+          if(!val){ res.textContent=' – chọn 1 đáp án'; res.style.color='#7a3b36'; q.classList.remove('correct','wrong'); return; }
+          const ok=(val===ans);
+          res.textContent=ok?' – đúng':' – chưa đúng';
+          res.style.color= ok? '#1f7a3f':'#b81c15';
+          q.classList.remove('correct','wrong'); q.classList.add(ok?'correct':'wrong');
+          updateProgress();
+        });
+      });
+
+      document.getElementById('scoreQuiz').addEventListener('click',()=>{
+        const qs=[...quizQs.querySelectorAll('.q')]; let score=0;
+        qs.forEach(q=>{ const val=q.querySelector('input[type="radio"]:checked')?.value; if(val && val===q.dataset.ans) score++; });
+        document.getElementById('scoreOut').textContent=`Bạn đúng ${score}/${qs.length}`;
+      });
+
+      // Ripple effect
+      const addRipple=el=>{
+        el.addEventListener('click', e=>{
+          const rect=el.getBoundingClientRect();
+          const r=document.createElement('span'); r.className='ripple';
+          const size=Math.max(rect.width, rect.height);
+          r.style.width=r.style.height=size+'px';
+          r.style.left=(e.clientX-rect.left-size/2)+'px';
+          r.style.top=(e.clientY-rect.top-size/2)+'px';
+          el.appendChild(r); r.addEventListener('animationend', ()=> r.remove());
+        });
+      };
+      document.querySelectorAll('button.btn, button.check, #tabs button, #scoreQuiz, #startQuiz, #fv-prev, #fv-next, #totop')
+        .forEach(addRipple);
     }, 'quiz');
-    safe(() => { const addRipple=el=>{ el.addEventListener('click', e=>{ const rect=el.getBoundingClientRect(); const r=document.createElement('span'); r.className='ripple'; const size=Math.max(rect.width, rect.height); r.style.width=r.style.height=size+'px'; r.style.left=(e.clientX-rect.left-size/2)+'px'; r.style.top=(e.clientY-rect.top-size/2)+'px'; el.appendChild(r); r.addEventListener('animationend', ()=> r.remove()); }); }; document.querySelectorAll('button.btn, button.check, #tabs button, #scoreQuiz, #startQuiz, #fv-prev, #fv-next, #totop').forEach(addRipple); }, 'ripple');
-    safe(() => { document.getElementById('totop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'})); }, 'totop');
+
+    /* Magnetic buttons (subtle follow cursor) */
+    safe(() => {
+      const mag = el => {
+        const strength = 10; // px
+        el.addEventListener('mousemove', (e)=>{
+          const r=el.getBoundingClientRect();
+          const x=(e.clientX - (r.left + r.width/2)) / (r.width/2);
+          const y=(e.clientY - (r.top + r.height/2)) / (r.height/2);
+          el.style.transform = `translate(${x*strength}px, ${y*strength}px)`;
+        });
+        el.addEventListener('mouseleave', ()=>{ el.style.transform=''; });
+      };
+      document.querySelectorAll('.btn, .check').forEach(mag);
+    }, 'magnetic');
+
+    /* Back to top */
+    safe(() => {
+      document.getElementById('totop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+    }, 'totop');
   });
   </script>
-
-  <button id="tochat" aria-label="Mở Chatbot" title="Mở Chatbot"><span>💬</span></button>
-    
 </body>
 </html>
